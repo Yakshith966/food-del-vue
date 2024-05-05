@@ -24,7 +24,7 @@
            />
          </div>
        </div>
-       <div class="food-item-info">
+       <div class="food-item-info" @click="navigateToAddItemPage(this.id,this.cartItems)">
          <div class="food-item-name-rating">
            <p>{{ name }}</p>
            <img :src="assets.rating_starts" alt="" />
@@ -38,6 +38,8 @@
       
       <script>
    import { assets } from "../../assets/assets.js";
+   import { mapState, mapActions } from 'vuex';
+
    export default {
      props: {
        id: String,
@@ -58,6 +60,7 @@
        isInCart() {
          return this.cartItemCount > 0;
        },
+     
        cartItemCount() {
          // Assuming you have access to the cart data here
          // Implement your logic to get the count of this item in the cart
@@ -67,9 +70,15 @@
      },
      mounted() {
        console.log('hii',this.name);
+       
      },
      methods: {
+      navigateToAddItemPage(itemId,cartItems) {
+      // Use Vue Router to navigate to the 'add-item' route with the itemId parameter
+      this.$router.push({ name: 'add-item', params: { id: itemId,cartItems:cartItems } });
+    },
        addToCart(id) {
+        console.log('data' ,this.cartItems);
          // Implement your logic to add this item to the cart
          // For demonstration purposes, I'll emit an event
          this.$emit("add-to-cart", id);

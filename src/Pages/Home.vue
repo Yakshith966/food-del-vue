@@ -42,5 +42,6 @@ export default {
      <FoodDisplay :category="category" />
      <AppDownloadVue/>
      <FooterVue/>
+
        
      </template>

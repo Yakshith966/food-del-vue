@@ -20,6 +20,8 @@
    <script>
 import { food_list } from "../../assets/assets.js";
 import FoodItem from "../FoodItem/FoodItem.vue";
+import { mapActions,useStore } from 'vuex';
+import { mapState } from 'vuex';
 import axios from 'axios';
 
 export default {
@@ -45,31 +47,13 @@ export default {
     
   },
   methods:{
+    ...mapActions(['addToCart', 'removeFromCart']),
     addToCartHandler(itemId) {
-      // Check if the item is already in the cart
-      if (itemId in this.cartItems) {
-        // If yes, increase the quantity by 1
-        this.cartItems[itemId]++;
-      } else {
-        // If no, add the item to the cart with quantity 1
-        this.cartItems[itemId] = 1;
-      }
-      console.log('Add to cart:', itemId);
-      console.log('Cart:', this.cartItems); // Log the updated cart items
+      console.log('emit',this.cartItems)
+      this.addToCart(itemId); // Dispatch addToCart action to Vuex store
     },
     removeFromCartHandler(itemId) {
-      // Check if the item is in the cart
-      if (itemId in this.cartItems) {
-        // If yes, decrease the quantity by 1
-        if (this.cartItems[itemId] > 1) {
-          this.cartItems[itemId]--;
-        } else {
-          // If the quantity is 1, remove the item from the cart
-          delete this.cartItems[itemId];
-        }
-        console.log('Remove from cart:', itemId);
-        console.log('Cart:', this.cartItems); // Log the updated cart items
-      }
+      this.removeFromCart(itemId); // Dispatch removeFromCart action to Vuex store
     },
     async getItemsByCategory(categoryId) {
   try {
@@ -93,6 +77,9 @@ export default {
         return food_list.filter((item) => item.category === this.category);
       }
     },
+    ...mapState({
+      cartItems: state => state.getCartItems // Access the getter using mapState
+    })
     
   },
   watch: {
